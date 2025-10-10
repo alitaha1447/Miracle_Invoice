@@ -4,6 +4,43 @@ menuBtn.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
 });
 
+function showToast(message, type = 'info', duration = 3000) {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    // animate in
+    // requestAnimationFrame(() => toast.classList.add('show'));
+    toast.classList.add('show')
+    // auto-hide
+    setTimeout(() => {
+        toast.classList.remove('show');
+        // toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, duration);
+}
+
+// LogOut
+function logOut(e) {
+    e.preventDefault();
+    // Clear login data from storage
+    localStorage.setItem("isLoggedIn", "false");
+    showToast(`Logout successfull!`, 'success', 1200);
+    // Redirect to login page
+    setTimeout(() => {
+        // replace() so Back button can't resurrect a protected page
+        window.location.replace("index.html");
+    }, 900);
+}
 
 const APIKEY = "12345678@";
 const BASE_URL = "https://hotelapi.shriyanshnath.com";

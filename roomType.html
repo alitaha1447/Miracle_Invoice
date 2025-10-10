@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Room Type Management - API</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
   <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
@@ -169,19 +170,8 @@
     &copy; 2025 Your Company. All rights reserved.
   </footer>
 
-  <script>
-    function logOut(e) {
-      e.preventDefault();
-      // Clear login data from storage
-      localStorage.setItem("isLoggedIn", "false");
-      showToast(`Logout successfull!`, 'success', 1200);
-      // Redirect to login page
-      setTimeout(() => {
-        // replace() so Back button can't resurrect a protected page
-        window.location.replace("index.html");
-      }, 900);
-    }
-  </script>
+
+  <div id="toast-container" class="toast-container"></div>
   <script src="js/roomType.js"></script>
 
 </body>
