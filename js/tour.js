@@ -1,3 +1,10 @@
+const menuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+});
+
+
 const APIKEY = "12345678@";
 const BASE_URL = "https://hotelapi.shriyanshnath.com";
 const PROPERTY_API = `${BASE_URL}/api/property`;
