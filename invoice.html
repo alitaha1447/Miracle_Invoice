@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice </title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+
+  <script>
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.replace("index.html");
+    }
+
+    // function initJqDates(id) {
+    //   const $cin = $(`#checkin_${id}`).prop('readOnly', true);
+    //   const $cout = $(`#checkout_${id}`).prop('readOnly', true);
+    //   const today = new Date(); today.setHours(0, 0, 0, 0);
+
+    //   // Common options: full months, no typing, popup above everything
+    //   const common = {
+    //     changeMonth: true,
+    //     changeYear: true,
+    //     dateFormat: 'yy-mm-dd',
+    //     appendTo: 'body',
+    //     // disable past days BUT keep all months visible
+    //     beforeShowDay: (d) => [d >= today]
+    //   };
+
+    //   $cin.datepicker(Object.assign({}, common, {
+    //     onSelect: function () {
+    //       const d = $cin.datepicker('getDate');
+    //       const minOut = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    //       $cout.datepicker('option', 'minDate', minOut);
+    //       const out = $cout.datepicker('getDate');
+    //       if (!out || out <= d) $cout.datepicker('setDate', minOut);
+    //     }
+    //   }));
+
+    //   $cout.datepicker(Object.assign({}, common, {
+    //     beforeShow: function () {
+    //       const d = $cin.datepicker('getDate');
+    //       const minOut = d ? new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1) : today;
+    //       $(this).datepicker('option', 'minDate', minOut);
+    //     }
+    //   }));
+    // }
+    function initJqDates(id) {
+      const $cin = $(`#checkin_${id}`).prop('readOnly', true).attr({ placeholder: 'DD-MM-YYYY', autocomplete: 'off' });
+      const $cout = $(`#checkout_${id}`).prop('readOnly', true).attr({ placeholder: 'DD-MM-DD', autocomplete: 'off' });
+
+      const opts = {
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd-mm-yy',
+        appendTo: 'body'   // avoids clipping inside overflow containers
+      };
+
+      $cin.datepicker(opts);
+      $cout.datepicker(opts);
+    }
+
+    $(function () {
+      $('#date')
+        .attr('placeholder', 'DD-MM-YYYY') // ensure placeholder set via JS too
+        .datepicker({
+          changeMonth: true,          // month dropdown
+          changeYear: true,           // year dropdown
+          yearRange: 'c-10:c+10',     // 10 years back to 10 ahead
+          // dateFormat: 'yy-mm-dd',     // ISO-like format
+          dateFormat: 'dd-mm-yy',     // ISO-like format
+          showAnim: 'fadeIn',
+          autocomplete: 'off'
+        });
+      $('#startDate')
+        .attr('placeholder', 'DD-MM-YYYY') // ensure placeholder set via JS too
+        .datepicker({
+          changeMonth: true,          // month dropdown
+          changeYear: true,           // year dropdown
+          yearRange: 'c-10:c+10',     // 10 years back to 10 ahead
+          dateFormat: 'dd-mm-yy',     // ISO-like format
+          showAnim: 'fadeIn',
+          autocomplete: 'off'
+        });
+      $('#endDate')
+        .attr('placeholder', 'DD-MM-YYYY') // ensure placeholder set via JS too
+        .datepicker({
+          changeMonth: true,          // month dropdown
+          changeYear: true,           // year dropdown
+          yearRange: 'c-10:c+10',     // 10 years back to 10 ahead
+          dateFormat: 'dd-mm-yy',     // ISO-like format
+          showAnim: 'fadeIn',
+          autocomplete: 'off'
+        });
+
+      // Initialize datepickers for the first booking details group
+      initJqDates(1);
+    });
+    $(document).ready(function () {
+      // Get today's date in 'DD-MM-YYYY' format
+      const today = new Date();
+      const dd = String(today.getDate()).padStart(2, '0');
+      const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+      const yyyy = today.getFullYear();
+      const formattedDate = dd + '-' + mm + '-' + yyyy;
+
+      // Set the default date in the input field
+      $('#date').val(formattedDate);
+      $('#activityCount_1').val(1);
+
+      // // Initialize the datepicker
+      // $('#date')
+      //   .attr('placeholder', 'DD-MM-YYYY') // ensure placeholder set via JS too
+      //   .datepicker({
+      //     changeMonth: true,          // month dropdown
+      //     changeYear: true,           // year dropdown
+      //     yearRange: 'c-10:c+10',     // 10 years back to 10 ahead
+      //     dateFormat: 'dd-mm-yy',     // Custom format
+      //     showAnim: 'fadeIn',
+      //     autocomplete: 'off'
+      //   });
+    });
+
+  </script>
+  <script src="js/script.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-cyan-50 to-green-50 text-gray-800 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-lg">
+    <div class="flex justify-between items-center px-6">
+      <!-- Navigation -->
+      <nav class="flex justify-center gap-8 py-4">
+        <a href="dashboard.html" class="font-semibold hover:text-green-200">Home</a>
+        <a href="roomType.html" class="font-semibold hover:text-green-200">Room Type</a>
+        <a href="tour.html" class="font-semibold hover:text-green-200">Tour</a>
+        <a href="activity.html" class="font-semibold hover:text-green-200">Activity</a>
+        <a href="invoice.html" class="font-semibold hover:text-green-200">Invoice</a>
+        <a href="expenditure.html" class="font-semibold hover:text-green-200">Expedition Invoice</a>
+      </nav>
+
+      <!-- Logout Button -->
+      <button onclick='logOut(event)'
+        class="flex items-center gap-2 bg-white text-green-600 font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-100 transition">
+        <!-- Heroicon Logout (Arrow Right On Door) -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex justify-center items-start px-2 sm:px-4 py-6 sm:py-10">
+    <form id="proformaInvoice" class="bg-white rounded-lg shadow-xl w-full max-w-6xl overflow-hidden">
+      <!-- Header -->
+      <div class="bg-gradient-to-r from-green-500 to-teal-500 p-4">
+        <h2 class="text-center text-xl sm:text-2xl lg:text-3xl font-bold text-white">Proforma Invoice</h2>
+      </div>
+      <div class="flex flex-wrap space-x-4 px-4 py-2">
+        <label class="inline-flex items-center mb-2">
+          <input type="radio" name="invoiceMode" value="new" checked class="h-4 w-4 text-green-600 focus:ring-green-500"
+            id="newInvoice">
+          <span class="ml-2 text-gray-700">New Invoice</span>
+        </label>
+        <label class="inline-flex items-center mb-2">
+          <input type="radio" name="invoiceMode" value="edit" class="h-4 w-4 text-green-600 focus:ring-green-500"
+            id="editInvoice">
+          <span class="ml-2 text-gray-700">Edit Invoice</span>
+        </label>
+      </div>
+      <div id="editInvoiceFields" class="hidden px-4 py-4 space-y-4">
+        <!-- Create a grid with 3 columns -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+
+          <!-- Start Date Field (Date Range) -->
+          <div>
+            <label for="startDate" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Start
+              Date</label>
+            <input type="text" id="startDate" name="startDate"
+              class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          </div>
+
+          <!-- End Date Field (Date Range) -->
+          <div>
+            <label for="endDate" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">End Date</label>
+            <input type="text" id="endDate" name="endDate"
+              class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          </div>
+
+          <div>
+            <label for="invoiceNo" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Invoice
+              Search</label>
+            <input type="text" id="invoiceNo" name="invoiceNo" placeholder="Search by invoice ID"
+              class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          </div>
+
+          <!-- Search Button -->
+          <div class="flex items-end">
+            <button type="button" onclick="getSearchInvoice(event)" id="invoiceSearchID"
+              class="w-full sm:w-auto px-4 py-3 bg-green-500 text-white font-semibold rounded-lg shadow-md transform transition hover:-translate-y-1 hover:shadow-lg">
+              Search
+            </button>
+          </div>
+
+          <div>
+            <label for="invoiceID" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Invoice
+              ID</label>
+            <select id="invoiceID" name="invoiceID" onfocus=""
+              class="inoiceEditId occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+              <option value="">-- Select --</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div class="p-4">
+        <!-- Basic Info Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
+          <div>
+            <label for="property" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Property</label>
+            <select id="property" name="property"
+              class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+              <option value="">-- Select Property --</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="guest" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Guest
+              Name</label>
+            <input type="text" id="guest" name="guest" placeholder="Enter guest name"
+              class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          </div>
+
+          <div>
+            <label for="date" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Invoice
+              Date</label>
+            <input type="text" id="date" name="date"
+              class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          </div>
+        </div>
+
+        <!-- Booking Details Container -->
+        <div class="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
+          <div class="flex items-center mb-4">
+            <button type="button" id="addInputGroupBtn"
+              class="bg-gradient-to-r from-green-500 to-teal-500 hover:bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3 transition-colors">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+            <span class="text-lg font-semibold text-gray-800">Booking Details</span>
+          </div>
+
+          <!-- The div to hold all the input groups -->
+          <div id="input-group-container">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4 items-end" data-group-id="1">
+              <div>
+                <label for="roomType_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Room
+                  Type</label>
+                <select id="roomType_1" name="roomType_1" onfocus="getRoomType(event)"
+                  class="occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+                  <option value="">-- Select --</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="checkin_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Check-in
+                  Date</label>
+                <input type="text" id="checkin_1" name="checkin_1"
+                  class="checkin w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+              </div>
+
+              <div>
+                <label for="checkout_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Check-out
+                  Date</label>
+                <input type="text" id="checkout_1" name="checkout_1"
+                  class="checkout w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+              </div>
+
+              <div>
+                <label for="rate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Rate (₹)</label>
+                <input type="number" id="rate_1" name="rate_1"
+                  class="rate w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+              <div>
+                <label for="rooms_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
+                  rooms</label>
+                <input type="number" id="rooms_1" name="rooms_1"
+                  class="room w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+              <div>
+                <label for="plan_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Package
+                  Plan</label>
+                <input type="text" id="plan_1" name="plan_1"
+                  class="plan w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="Plan name">
+              </div>
+
+              <div>
+                <label for="taxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
+                  Rate</label>
+                <select id="taxRate_1" name="taxRate_1" onfocus="getTaxRate(event)"
+                  class="tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+                  <option value="">-- Select --</option>
+                </select>
+              </div>
+
+              <div class="flex items-end">
+                <div class="w-full">
+                  <label for="total_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Total
+                    (₹)</label>
+                  <input type="number" id="total_1" name="total_1"
+                    class="total w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                    placeholder="0">
+                </div>
+
+                <button type="button"
+                  class="minus-btn bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center ml-2 transition-colors hidden"
+                  onclick="removeInputGroup(this)">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- Activities Details Container -->
+        <div class="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
+          <div class="flex items-center mb-4">
+            <button type="button" id="addActivityGroupBtn"
+              class="bg-gradient-to-r from-green-500 to-teal-500 hover:bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center mr-3 transition-colors">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+            <span class="text-lg font-semibold text-gray-800">Activity Details</span>
+          </div>
+
+          <!-- Activity input groups container -->
+          <div id="activity-group-container">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4 items-end" data-activity-group-id="1">
+              <div>
+                <label for="activityName_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Activity
+                  Name</label>
+                <!-- <input type="text" name="activityName_1" id="activityName_1"
+                  class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="Activity name"> -->
+                <select name="activityName_1" id="activityName_1" onfocus="getActivityName(event)"
+                  class="activity-tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+                  <option value="">-- Select --</option>
+                </select>
+              </div>
+
+              <!-- <div>
+                <label for="activitySacCode_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">SAC
+                  Code</label>
+                <input type="text" name="activitySacCode_1" id="activitySacCode_1"
+                  class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="SAC code">
+              </div> -->
+
+              <div>
+                <label for="activityCount_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
+                  Activities</label>
+                <input type="number" name="activityCount_1" id="activityCount_1"
+                  class="activity-count w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+              <div>
+                <label for="activityRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Rate
+                  (₹)</label>
+                <input type="number" name="activityRate_1" id="activityRate_1"
+                  class="activity-rate w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+              <div>
+                <label for="activityTaxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
+                  Rate</label>
+                <select name="activityTaxRate_1" id="activityTaxRate_1" onfocus="getTaxRate(event)"
+                  class="activity-tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+                  <option value="">-- Select --</option>
+                </select>
+              </div>
+
+              <div class="flex items-end">
+                <div class="w-full">
+                  <label for="activityTotal_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Total
+                    (₹)</label>
+                  <input type="number" name="activityTotal_1" id="activityTotal_1"
+                    class="activity-total w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                    placeholder="0">
+                </div>
+                <button type="button"
+                  class="activity-minus-btn bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center ml-2 transition-colors hidden">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Advance Details Container -->
+        <div class="bg-gray-50 rounded-lg p-4 sm:p-6 mb-6">
+          <div class="flex items-center mb-4">
+            <span class="text-lg font-semibold text-gray-800">Advance Details</span>
+          </div>
+
+          <!-- Activity input groups container -->
+          <div id="activity-group-container">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4 items-end">
+              <div>
+                <label for="advanceAmt" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Advance
+                  Amount</label>
+                <input type="number" name="advanceAmt" id="advanceAmt"
+                  class="advanceAmt w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Submit Button -->
+        <div class="flex justify-center">
+          <button type="button" id="submitButton" onclick="handleSubmitForm(event)"
+            class="w-full sm:w-auto sm:min-w-[200px] px-8 py-3 sm:py-2 text-white font-semibold rounded-lg bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 active:from-green-700 active:to-teal-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-base sm:text-lg">
+            <span id="submitText">
+              Submit Invoice
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-3 mt-12 text-sm">
+    &copy; 2025 Your Company. All rights reserved.
+  </footer>
+
+  <script>
+
+    document.getElementById('newInvoice').addEventListener('change', function () {
+      document.getElementById('editInvoiceFields').classList.add('hidden');
+    });
+
+    document.getElementById('editInvoice').addEventListener('change', function () {
+      document.getElementById('editInvoiceFields').classList.remove('hidden');
+    });
+
+    document.getElementById('editInvoice').addEventListener('change', function () {
+      if (this.checked) {
+        document.getElementById('submitText').textContent = 'Edit Invoice';  // Change button text to "Edit Invoice"
+      }
+    });
+
+    document.getElementById('newInvoice').addEventListener('change', function () {
+      if (this.checked) {
+        document.getElementById('submitText').textContent = 'Submit Invoice';  // Change button text back to "Submit Invoice"
+        window.location.reload();
+      }
+    });
+
+    let groupCounter = 1;
+    let activityGroupCounter = 1;
+
+    // Add input group
+    document.getElementById('addInputGroupBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      addInputGroup();
+    });
+
+    // Add activity group
+    document.getElementById('addActivityGroupBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      addActivityGroup();
+    });
+
+    function addInputGroup() {
+      groupCounter++;
+      const inputGroupContainer = document.getElementById('input-group-container');
+
+      const newInputGroup = document.createElement('div');
+      newInputGroup.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-5', 'gap-4', 'mb-4', 'items-end');
+      newInputGroup.setAttribute('data-group-id', groupCounter);
+
+      newInputGroup.innerHTML = `
+        <div>
+          <label for="roomType_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Room Type</label>
+          <select id="roomType_${groupCounter}" name="roomType_${groupCounter}"  onfocus="getRoomType(event)"
+            class="occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base" >
+            <option value="">-- Select --</option>
+          </select >
+        </div >
+        <div>
+          <label for="checkin_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Check-in Date</label>
+          <input type="text" id="checkin_${groupCounter}" name="checkin_${groupCounter}"
+            class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+        </div>
+
+        <div>
+          <label for="checkout_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Check-out Date</label>
+        <input type="text" id="checkout_${groupCounter}" name="checkout_${groupCounter}"
+          class="w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+        </div>
+
+        <div>
+          <label for="rate_${groupCounter}"  class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Rate (₹)</label>
+          <input type="number" id="rate_${groupCounter}" name="rate_${groupCounter}"
+            class="rate w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+            placeholder="0">
+        </div>
+
+      <div>
+                <label for="rooms_${groupCounter}"  class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
+                  rooms</label>
+                <input type="number" id="rooms_${groupCounter}" name="rooms_${groupCounter}"
+                  class="room w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+               <div>
+      <label for="plan_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Plan</label>
+      <input type="text" id="plan_${groupCounter}" name="plan_${groupCounter}"
+        class="plan w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+        placeholder="Plan name">
+    </div>
+
+    <div>
+      <label for="taxRate_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax Rate</label>
+      <select id="taxRate_${groupCounter}" name="taxRate_${groupCounter}" onfocus="getTaxRate(event)"
+        class="tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+         <option value="${defaultTaxRate}">${defaultTaxRate}%</option>
+      </select>
+    </div>
+
+    <div class="flex items-end">
+      <div class="w-full">
+        <label for="total_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Total (₹)</label>
+        <input type="text" id="total_${groupCounter}" name="total_${groupCounter}"
+          class="total w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+           placeholder="0">
+      </div>
+      <button type="button"
+        class="minus-btn bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center ml-2 transition-colors"
+        onclick="removeInputGroup(this)">
+        <i class="fa-solid fa-minus"></i>
+      </button>
+    </div>
+      `;
+
+      inputGroupContainer.appendChild(newInputGroup);
+
+      // BIND EVENT LISTENERS FOR THE NEW ELEMENTS
+
+      // const roomTypeSelect = newInputGroup.querySelector(`#roomType_${groupCounter}`);
+      // roomTypeSelect.addEventListener('focus', getRoomType);
+
+      // const taxRateSelect = newInputGroup.querySelector(`#taxRate_${groupCounter}`);
+      // taxRateSelect.addEventListener('focus', getTaxRate);
+
+      initJqDates(groupCounter)
+      // Update minus buttons visibility
+      updateMinusButtons();
+
+      console.log(`Added booking details group #${groupCounter} `);
+    }
+
+    function addActivityGroup() {
+      activityGroupCounter++;
+      const activityGroupContainer = document.getElementById('activity-group-container');
+
+      const newActivityGroup = document.createElement('div');
+      newActivityGroup.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-5', 'gap-4', 'mb-4', 'items-end');
+      newActivityGroup.setAttribute('data-activity-group-id', activityGroupCounter);
+
+      newActivityGroup.innerHTML = `
+
+              <div>
+                <label for="activityName_${activityGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Activity
+                  Name</label>
+                <select name="activityName_${activityGroupCounter}" id="activityName_${activityGroupCounter}" onfocus="getActivityName(event)"
+                  class="activity-tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+                  <option value="">-- Select --</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="activityCount_${activityGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
+                  Activities</label>
+                <input type="number" name="activityCount_${activityGroupCounter}" id="activityCount_${activityGroupCounter}"
+                  class="activity-count w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+              <div>
+                <label for="activityRate_${activityGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Rate
+                  (₹)</label>
+                <input type="number" name="activityRate_${activityGroupCounter}" id="activityRate_${activityGroupCounter}"
+                  class="activity-rate w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                  placeholder="0">
+              </div>
+
+              <div>
+                <label for="activityTaxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
+                  Rate</label>
+                <select name="activityTaxRate_${activityGroupCounter}" id="activityTaxRate_${activityGroupCounter}" onfocus="getTaxRate(event)"
+                  class="activity-tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+              
+                   <option value="${defaultTaxRate}">${defaultTaxRate}%</option>
+                </select>
+              </div>
+
+              <div class="flex items-end">
+                <div class="w-full">
+                  <label for="activityTotal_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Total
+                    (₹)</label>
+                  <input type="text" name="activityTotal_${activityGroupCounter}" id="activityTotal_${activityGroupCounter}"
+                    class="activity-total w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
+                    placeholder="0">
+                </div>
+                <button type="button"
+                  class="activity-minus-btn bg-red-500 hover:bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center ml-2 transition-colors hidden">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+              </div>
+      `;
+
+      activityGroupContainer.appendChild(newActivityGroup);
+
+
+      // Update minus buttons visibility
+      updateActivityMinusButtons();
+
+      // console.log(`Added activity group #${activityGroupCounter}`);
+    }
+    // Remove input group
+    function removeInputGroup(button) {
+      const inputGroup = button.closest('.grid');
+      // const groupId = inputGroup.getAttribute('data-group-id');
+
+      inputGroup.remove();
+
+      // Update minus buttons visibility
+      updateMinusButtons();
+
+      // console.log(`Removed booking details group #${groupId}`);
+    }
+
+    // Remove activity group
+    function removeActivityGroup(button) {
+      const activityGroup = button.closest('[data-activity-group-id]');
+      const groupId = activityGroup.getAttribute('data-activity-group-id');
+
+      activityGroup.remove();
+
+      // Update minus buttons visibility
+      updateActivityMinusButtons();
+
+      // console.log(`Removed activity group #${groupId}`);
+    }
+    // Update minus buttons visibility
+    function updateMinusButtons() {
+      const allInputGroups = document.querySelectorAll('#input-group-container > .grid');
+      allInputGroups.forEach((group, index) => {
+        const minusBtn = group.querySelector('.minus-btn');
+        // Hide the minus button if it's the only input group
+        if (allInputGroups.length === 1) {
+          minusBtn.classList.add('hidden');
+        } else {
+          minusBtn.classList.remove('hidden');
+        }
+      });
+    }
+
+    // Update activity minus buttons visibility
+    function updateActivityMinusButtons() {
+      const allActivityGroups = document.querySelectorAll('[data-activity-group-id]');
+
+      allActivityGroups.forEach((group, index) => {
+        const minusBtn = group.querySelector('.activity-minus-btn');
+
+        // Hide the minus button if it's the only activity group
+        if (allActivityGroups.length === 1) {
+          minusBtn.classList.add('hidden');
+        } else {
+          minusBtn.classList.remove('hidden');
+        }
+
+        // Add event listener if not already added
+        minusBtn.onclick = function () { removeActivityGroup(this); };
+      });
+    }
+  </script>
+
+  <div id="toast-container" class="toast-container"></div>
+
+</body>
+
+</html>

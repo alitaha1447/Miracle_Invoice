@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #e0f2f1, #e8f5e9);
+      color: #333;
+    }
+
+    header {
+      /* background: linear-gradient(135deg, #43a047, #2e7d32); */
+      padding: 15px 30px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #c8e6c9;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      min-height: 400px;
+    }
+
+    .card {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeIn .8s ease;
+      text-align: center;
+    }
+
+    .card h1 {
+      margin-bottom: 15px;
+      color: #2e7d32;
+    }
+
+    .dashboard-grid {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+    }
+
+    .tile {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+    }
+
+    .tile h2 {
+      color: #2e7d32;
+      margin-bottom: 10px;
+    }
+
+    .tile p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      margin-top: 50px;
+      font-size: 14px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-500 to-teal-500">
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="invoice.html">Invoice</a>
+      <a href="expenditure.html">Expenditure</a>
+      <a href="roomType.html">Room Type</a>
+      <a href="tour.html">Tour</a>
+      <a href="activity.html">Activity</a>
+    </nav>
+  </header>
+
+  <!-- Home Section -->
+  <main>
+    <div class="card">
+      <h1>Welcome to Dashboard</h1>
+      <p>Select a section below to manage details.</p>
+
+      <div class="dashboard-grid">
+        <div class="tile" onclick="location.href='invoice.html'">
+          <h2>Invoice</h2>
+          <p>Manage and track invoices efficiently.</p>
+        </div>
+        <div class="tile" onclick="location.href='expenditure.html'">
+          <h2>Expenditure</h2>
+          <p>View and manage your expenditures.</p>
+        </div>
+        <div class="tile" onclick="location.href='roomType.html'">
+          <h2>Room Type</h2>
+          <p>Check and update room categories.</p>
+        </div>
+        <div class="tile" onclick="location.href='tour.html'">
+          <h2>Tour</h2>
+          <p>Plan and manage tours easily.</p>
+        </div>
+        <div class="tile" onclick="location.href='activity.html'">
+          <h2>Activity</h2>
+          <p>Track and monitor activities.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Your Company. All rights reserved.
+  </footer>
+</body>
+
+</html>

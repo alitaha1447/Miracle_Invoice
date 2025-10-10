@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proforma Invoice</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+           
+        }
+
+        #loader {
+            text-align: center;
+            padding: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader">Loading invoice...</div>
+    <div id="invoice-container"></div>
+
+    <script>
+        // Get invoice_id from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const invoiceId = urlParams.get("invoice_id");
+
+        if (!invoiceId) {
+            document.getElementById("loader").textContent = "No invoice_id provided!";
+        } else {
+            loadInvoice(invoiceId);
+        }
+
+        async function loadInvoice(invoiceId) {
+            try {
+                const apiUrl = `https://hotelapi.shriyanshnath.com/api/proforma_invoice_Report_Print?APIKEY=12345678@&invoice_id=${invoiceId}`;
+                // const apiUrl = `https://hotelapi.shriyanshnath.com/api/proforma_invoice_Report_Print?APIKEY=12345678@&invoice_id=40ebbf64-6211-4ced-9a8e-e2b98fecc274`;
+
+                const res = await fetch(apiUrl);
+                const data = await res.json();
+
+                // Replace loader
+                document.getElementById("loader").style.display = "none";
+
+                if (data && data.reportdata) {
+                    // Inject invoice HTML into page
+                    document.getElementById("invoice-container").innerHTML = data.reportdata;
+
+                    // Auto open print dialog after invoice loads
+                    setTimeout(() => {
+                        window.print();
+                    }, 1000);
+                } else {
+                    document.getElementById("invoice-container").innerHTML = "<p>No report data found.</p>";
+                }
+            } catch (err) {
+                console.error("Error loading invoice:", err);
+                document.getElementById("loader").textContent = "Error loading invoice!";
+            }
+        }
+    </script>
+</body>
+
+</html>

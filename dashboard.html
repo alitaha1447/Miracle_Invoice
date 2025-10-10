@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard </title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // if (localStorage.getItem("isLoggedIn") !== "true") {
+    //   // No flash: bail out before rendering
+    //   location.replace("index.html");
+    // } else {
+    //   // Auth OK: reveal the page immediately
+    //   document.documentElement.style.visibility = "visible";
+    // }
+
+    // // Handle bfcache/back navigation restoring a protected page
+    // window.addEventListener("pageshow", (e) => {
+    //   if (e.persisted && localStorage.getItem("isLoggedIn") !== "true") {
+    //     location.replace("index.html");
+    //   }
+    // });
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      window.location.replace("index.html");
+    }
+  </script>
+  <script src="js/script.js"></script>
+
+  <style>
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-cyan-50 to-green-50 font-sans text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-green-500 to-teal-500 text-white shadow-lg">
+    <div class="flex justify-between items-center px-6">
+      <!-- Navigation -->
+      <nav class="flex justify-center gap-8 py-4">
+        <a href="dashboard.html" class="font-semibold hover:text-green-200">Home</a>
+        <a href="roomType.html" class="font-semibold hover:text-green-200">Room Type</a>
+        <a href="tour.html" class="font-semibold hover:text-green-200">Tour</a>
+        <a href="activity.html" class="font-semibold hover:text-green-200">Activity</a>
+        <a href="invoice.html" class="font-semibold hover:text-green-200">Invoice</a>
+        <a href="expenditure.html" class="font-semibold hover:text-green-200">Expedition Invoice</a>
+      </nav>
+
+      <!-- Logout Button -->
+      <button onclick='logOut(event)'
+        class="flex items-center gap-2 bg-white text-green-600 font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-100 transition">
+        <!-- Heroicon Logout (Arrow Right On Door) -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+        </svg>
+        Logout
+      </button>
+    </div>
+  </header>
+
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto my-10 px-4 min-h-[400px]">
+    <div class="bg-white p-8 rounded-xl shadow-xl fade-in text-center">
+      <h1 class="text-3xl font-bold text-green-700 mb-4">Welcome to Dashboard</h1>
+      <p class="text-gray-600 mb-8">Select a section to manage details.</p>
+
+      <!-- Dashboard Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+
+        <!-- Invoice -->
+        <a href="invoice.html"
+          class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition cursor-pointer block">
+          <h2 class="text-xl font-semibold text-green-700 mb-2">Invoice</h2>
+          <p class="text-gray-600 text-sm">Manage and track invoices efficiently.</p>
+        </a>
+
+        <!-- Expenditure -->
+        <a href="expenditure.html"
+          class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition cursor-pointer block">
+          <h2 class="text-xl font-semibold text-green-700 mb-2">Expedition Invoice</h2>
+          <p class="text-gray-600 text-sm">Keep track of your expenses and spending.</p>
+        </a>
+
+        <!-- Room Type -->
+        <a href="roomType.html"
+          class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition cursor-pointer block">
+          <h2 class="text-xl font-semibold text-green-700 mb-2">Room Type</h2>
+          <p class="text-gray-600 text-sm">View and update hotel room categories.</p>
+        </a>
+
+        <!-- Tour -->
+        <a href="tour.html"
+          class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition cursor-pointer block">
+          <h2 class="text-xl font-semibold text-green-700 mb-2">Tour</h2>
+          <p class="text-gray-600 text-sm">Plan and manage tours easily.</p>
+        </a>
+
+        <!-- Activity -->
+        <a href="activity.html"
+          class="p-6 bg-gray-50 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition cursor-pointer block">
+          <h2 class="text-xl font-semibold text-green-700 mb-2">Activity</h2>
+          <p class="text-gray-600 text-sm">Track and monitor activities.</p>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-3 mt-12 text-sm">
+    &copy; 2025 Your Company. All rights reserved.
+  </footer>
+
+  <div id="toast-container" class="toast-container"></div>
+</body>
+
+</html>
