@@ -3,17 +3,7 @@ const mobileMenu = document.getElementById('mobile-menu');
 menuBtn.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
 });
-function logOut(e) {
-    e.preventDefault();
-    // Clear login data from storage
-    localStorage.setItem("isLoggedIn", "false");
-    showToast(`Logout successfull!`, 'success', 1200);
-    // Redirect to login page
-    setTimeout(() => {
-        // replace() so Back button can't resurrect a protected page
-        window.location.replace("index.html");
-    }, 900);
-}
+
 
 const APIKEY = "12345678@";
 const BASE_URL = "https://hotelapi.shriyanshnath.com";
