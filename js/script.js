@@ -1067,6 +1067,31 @@ function calculateExpenditTourTotal(groupId) {
     }
 }
 
+function calculateExpenditTourRateFromTotal(groupId) {
+    const pax = parseFloat(document.getElementById(`pax_${groupId}`).value) || 0;
+    const taxRate = parseFloat(document.getElementById(`taxRate_${groupId}`).value) || 0;
+    const tourTotal = parseFloat(document.getElementById(`tourTotal_${groupId}`).value) || 0;
+
+    if (pax > 0) {
+        const rate = tourTotal / (pax * (1 + taxRate / 100));
+        const rateElement = document.getElementById(`rate_${groupId}`); // fixed: should update tourRate, not taxRate
+        if (rateElement) {
+            rateElement.value = rate.toFixed(2);
+        } else {
+            console.error(`Element with id 'rate_${groupId}' not found.`);
+        }
+    }
+}
+
+document.addEventListener("input", (e) => {
+    if (e.target.classList.contains('tour-total')) {
+        const groupId = e.target.id.split("_")[1];
+        calculateExpenditTourRateFromTotal(groupId);
+    }
+});
+
+
+
 // Event listeners
 document.addEventListener("input", (e) => {
     if (e.target.classList.contains('expendit-pax') || e.target.classList.contains('expendit-rate') || e.target.classList.contains('expendit-extraTaxRate')) {
