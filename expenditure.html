@@ -126,24 +126,13 @@
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex justify-center gap-8">
         <a href="dashboard.html" class="font-semibold hover:text-green-200">Home</a>
-        <a href="roomType.html" class="font-semibold hover:text-green-200">Room Type</a>
+        <!-- <a href="roomType.html" class="font-semibold hover:text-green-200">Room Type</a>
         <a href="tour.html" class="font-semibold hover:text-green-200">Tour</a>
-        <a href="activity.html" class="font-semibold hover:text-green-200">Activity</a>
-        <a href="invoice.html" class="font-semibold hover:text-green-200">Invoice</a>
+        <a href="activity.html" class="font-semibold hover:text-green-200">Activity</a> -->
+        <a href="invoice.html" class="font-semibold hover:text-green-200">Lodges Invoice</a>
         <a href="expenditure.html" class="font-semibold hover:text-green-200">Expedition Invoice</a>
       </nav>
 
-      <!-- Logout Button -->
-      <button onclick='logOut(event)'
-        class="hidden md:flex items-center gap-2 bg-white text-emerald-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-emerald-50 transition duration-300">
-        <!-- Heroicon Logout (Arrow Right On Door) -->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-          class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-        </svg>
-        Logout
-      </button>
       <!-- Mobile Menu Button -->
       <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
@@ -151,28 +140,55 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
+
+      <div class="flex md:flex justify-center items-center gap-4">
+        <!-- Logout Button -->
+        <button onclick='logOut(event)'
+          class="flex items-center gap-2 bg-white text-emerald-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-emerald-50 transition duration-300">
+          <!-- Heroicon Logout (Arrow Right On Door) -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+          </svg>
+          Logout
+        </button>
+        <!-- Master DropDown -->
+        <div class="relative" id="master-menu-wrapper">
+          <button id="master-menu-btn"
+            class="flex items-center gap-2 bg-white text-emerald-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-emerald-50 transition duration-300"
+            aria-haspopup="true" aria-expanded="false">
+            <span>Master</span>
+            <svg id="master-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+              class="w-4 h-4 transition-transform duration-200">
+              <path fill-rule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div id="master-menu"
+            class="absolute right-0 mt-2 w-48 bg-white text-emerald-800 rounded-lg shadow-lg ring-1 ring-black/5 py-2 hidden z-[60]"
+            role="menu" aria-labelledby="master-menu-btn">
+            <a href="roomType.html" class="block px-4 py-2 hover:bg-emerald-50 rounded-md" role="menuitem">Room Type</a>
+            <a href="tour.html" class="block px-4 py-2 hover:bg-emerald-50 rounded-md" role="menuitem">Tour</a>
+            <a href="activity.html" class="block px-4 py-2 hover:bg-emerald-50 rounded-md" role="menuitem">Activity</a>
+          </div>
+        </div>
+      </div>
+
     </div>
     <!-- Mobile Menu -->
     <nav id="mobile-menu"
       class="flex flex-col md:hidden bg-emerald-700 text-white space-y-3 px-6 py-4 shadow-lg border-t border-emerald-500">
       <a href="dashboard.html" class="hover:text-yellow-200 block">Home</a>
-      <a href="roomType.html" class="hover:text-yellow-200 block">Room Type</a>
+      <!-- <a href="roomType.html" class="hover:text-yellow-200 block">Room Type</a>
       <a href="tour.html" class="hover:text-yellow-200 block">Tour</a>
-      <a href="activity.html" class="hover:text-yellow-200 block">Activity</a>
-      <a href="invoice.html" class="hover:text-yellow-200 block">Invoice</a>
+      <a href="activity.html" class="hover:text-yellow-200 block">Activity</a> -->
+      <a href="invoice.html" class="hover:text-yellow-200 block">Lodges Invoice</a>
       <a href="expenditure.html" class="hover:text-yellow-200 block">Expedition Invoice</a>
-      <div>
-        <button onclick="logOut(event)"
-          class="mt-3 flex items-center gap-2 bg-white text-emerald-700 font-semibold px-4 py-2 rounded-lg shadow hover:bg-emerald-50 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9">
-            </path>
-          </svg>
-          Logout
-        </button>
-      </div>
+
     </nav>
 
   </header>
@@ -466,6 +482,26 @@
     const mobileMenu = document.getElementById('mobile-menu');
     menuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
+    });
+
+    const btn = document.getElementById('master-menu-btn');
+    const menu = document.getElementById('master-menu');
+    const caret = document.getElementById('master-caret');
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // toggle open/close
+      menu.classList.toggle('hidden');
+      caret.classList.toggle('rotate-180');
+
+    });
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!btn.contains(e.target) && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        caret.classList.remove('rotate-180');
+      }
     });
 
 

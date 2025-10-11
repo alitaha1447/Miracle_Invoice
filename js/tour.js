@@ -4,6 +4,26 @@ menuBtn.addEventListener('click', () => {
     mobileMenu.classList.toggle('hidden');
 });
 
+const btn = document.getElementById('master-menu-btn');
+const menu = document.getElementById('master-menu');
+const caret = document.getElementById('master-caret');
+
+btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // toggle open/close
+    menu.classList.toggle('hidden');
+    caret.classList.toggle('rotate-180');
+
+});
+// Close when clicking outside
+document.addEventListener("click", (e) => {
+    if (!btn.contains(e.target) && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        caret.classList.remove('rotate-180');
+    }
+});
+
 function showToast(message, type = 'info', duration = 3000) {
     let container = document.getElementById('toast-container');
     if (!container) {
