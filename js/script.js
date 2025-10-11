@@ -743,7 +743,7 @@ function getTourName(e) {
         .then(data => {
             // console.log(data)
             if (data.length === 0) {
-                select.innerHTML = '<option>No rooms available</option>';
+                select.innerHTML = '<option>No Tour available</option>';
                 return;
             }
             // let html = '';
@@ -770,7 +770,7 @@ function getExpenditActivityName(e) {
         .then(r => r.ok ? r.json() : [])
         .then(data => {
             if (data.length === 0) {
-                select.innerHTML = '<option>No rooms available</option>';
+                select.innerHTML = '<option>No Activity available</option>';
                 return;
             }
             let html = '';
@@ -858,7 +858,7 @@ function getActivityName(e) {
         .then(data => {
             // console.log(data)
             if (data.length === 0) {
-                select.innerHTML = '<option>No tax rates</option>';
+                select.innerHTML = '<option>No Activity available</option>';
                 return;
             }
 
