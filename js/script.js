@@ -921,6 +921,50 @@ function calculateBookingTotal(groupId) {
     }
 }
 
+// function calculateBookingTotal(groupId) {
+//     const rate = parseFloat(document.getElementById(`rate_${groupId}`).value) || 0;
+//     const rooms = parseFloat(document.getElementById(`rooms_${groupId}`).value) || 0;
+//     const checkin = document.getElementById(`checkin_${groupId}`).value;
+//     const checkout = document.getElementById(`checkout_${groupId}`).value;
+//     const taxRateElement = document.getElementById(`taxRate_${groupId}`);
+//     const totalElement = document.getElementById(`total_${groupId}`);
+
+//     if (!totalElement) {
+//         console.error(`Element with id 'total_${groupId}' not found.`);
+//         return;
+//     }
+
+//     // Calculate the number of days between check-in and check-out
+//     const daysDifference = calculateDaysBetweenDates(checkin, checkout);
+//     if (isNaN(daysDifference)) {
+//         console.log("Invalid dates provided.");
+//         return;
+//     }
+
+//     // Base = rate × rooms × days
+//     const base = daysDifference * rooms * rate;
+
+//     // 🔹 Debug log: find and log the closest div to taxRate
+//     if (taxRateElement) {
+//         const parentDiv = taxRateElement.closest("div");
+//         console.log("Closest div for taxRate_", groupId, "=>", parentDiv);
+//         console.log("Is hidden:", parentDiv.classList.contains("hidden"));
+
+//         // Use tax only if visible
+//         let taxRate = 0;
+//         if (!parentDiv.classList.contains("hidden")) {
+//             taxRate = parseFloat(taxRateElement.value) || 0;
+//         }
+
+//         const total = base + (base * taxRate / 100);
+//         totalElement.value = total.toFixed(2);
+//     } else {
+//         console.error(`Tax Rate element with id 'taxRate_${groupId}' not found.`);
+//         totalElement.value = base.toFixed(2);
+//     }
+// }
+
+
 $(document).ready(function () {
     // Initialize the datepicker for check-in and check-out fields
     $('.datepicker').datepicker({
@@ -967,7 +1011,8 @@ function calculateActivityTotal(groupId) {
     // document.getElementById(`activityTotal_${groupId}`).value = total.toFixed(2);
     const totalElement = document.getElementById(`activityTotal_${groupId}`);
     if (totalElement) {
-        totalElement.value = total.toFixed(2)
+        // totalElement.value = total.toFixed(2)
+        totalElement.value = Math.round(total)
     } else {
         console.error(`Element with id 'activityTotal_${groupId}' not found.`);
 
@@ -1061,7 +1106,8 @@ function calculateExpenditTourTotal(groupId) {
     const totalAmount = base + taxAmount + extraTaxCalculation;
     const totalElement = document.getElementById(`tourTotal_${groupId}`);
     if (totalElement) {
-        totalElement.value = totalAmount.toFixed(2);
+        // totalElement.value = totalAmount.toFixed(2);
+        totalElement.value = Math.round(totalAmount); // round to nearest integer
     } else {
         console.error(`Element with id 'tourTotal_${groupId}' not found.`);
     }
@@ -1077,6 +1123,7 @@ function calculateExpenditTourRateFromTotal(groupId) {
         const rateElement = document.getElementById(`rate_${groupId}`); // fixed: should update tourRate, not taxRate
         if (rateElement) {
             rateElement.value = rate.toFixed(2);
+            // rateElement.value = Math.round(rate);
         } else {
             console.error(`Element with id 'rate_${groupId}' not found.`);
         }
@@ -1152,6 +1199,7 @@ function handleSubmitForm(e) {
     }
     // buttonText.innerText = '⏳ Submitting...'
 
+    const currency = document.getElementById('currency').value
     const propertyID = document.getElementById('property').value
     const guestName = document.getElementById('guest').value
     // const invoiceDate = document.getElementById('date').value
@@ -1218,6 +1266,7 @@ function handleSubmitForm(e) {
     })
 
     const ProformaInvoiceData = {
+        Currency: currency,
         InvoiceId: invoice_id,
         PropertyId: propertyID,
         GuestDetail: guestName,
@@ -1281,13 +1330,13 @@ function handleExpenditureForm(e) {
         invoice_id = uuidv4();
         console.log(invoice_id)
     }
-
+    const currency = document.getElementById('currency').value
     const guestDetail = document.getElementById('guest').value
     const dateInput = document.getElementById('date').value   // e.g., "16-10-2025"
     const invoiceDate = formatDateYYYYMMDD(dateInput);
     const advanceAmt = document.getElementById('advanceAmt').value
 
-    const apiUrl = `${BASEPATH}/api/Expendit_Invoice?APIKEY=${APIKEY}`;
+    // const apiUrl = `${BASEPATH}/api/Expendit_Invoice?APIKEY=${APIKEY}`;
 
     const ExpeditionTour = [];
     const ExpeditionActivity = [];
@@ -1348,6 +1397,7 @@ function handleExpenditureForm(e) {
     })
 
     const ExpenditInvoiceData = {
+        Currency: currency,
         PropertyId: expenditPropertyId,
         InvoiceId: invoice_id,
         GuestDetail: guestDetail,

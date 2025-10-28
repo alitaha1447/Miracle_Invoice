@@ -247,6 +247,15 @@
           <span class="ml-2 text-gray-700">Edit Invoice</span>
         </label>
       </div>
+      <div class="px-4 py-2">
+        <label class=" block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Currency</label>
+        <select id="currency" name="currency"
+          class="w-auto p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          <option value="">-- Select --</option>
+          <option value="0">Rupee (₹)</option>
+          <option value="1">Dollar ($)</option>
+        </select>
+      </div>
       <div id="editInvoiceFields" class="hidden px-4 py-4 space-y-4">
         <!-- Create a grid with 3 columns -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
@@ -378,7 +387,7 @@
                   placeholder="Plan name">
               </div>
 
-              <div>
+              <div id="taxRateDiv_1" class="block tax-rate-div">
                 <label for="taxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
                   Rate</label>
                 <select id="taxRate_1" name="taxRate_1" onfocus="getTaxRate(event)"
@@ -386,6 +395,15 @@
                   <option value="">-- Select --</option>
                 </select>
               </div>
+
+              <!-- <div id="taxRate_1">
+                <label for="taxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
+                  Rate</label>
+                <select id="taxRate_1_select" name="taxRate_1" onfocus="getTaxRate(event)"
+                  class="tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+                  <option value="">-- Select --</option>
+                </select>
+              </div> -->
 
               <div class="flex items-end">
                 <div class="w-full">
@@ -566,8 +584,35 @@
       }
     });
 
+    // const taxable = document.getElementById('taxable');
+    // const nonTax = document.getElementById('nonTax');
+    // const taxRateDiv = document.getElementById('taxRateDiv_1');
+
+    // function toggleTaxRate() {
+    //   if (taxable.checked) {
+    //     taxRateDiv.classList.remove('hidden');
+    //   } else {
+    //     taxRateDiv.classList.add('hidden');
+    //   }
+    // }
+
+    // // // Run on load
+    // toggleTaxRate();
+
+    // // // Add event listeners
+    // taxable.addEventListener('change', toggleTaxRate);
+    // nonTax.addEventListener('change', toggleTaxRate);
+
+
+
+
+
     let groupCounter = 1;
     let activityGroupCounter = 1;
+
+
+
+
 
     // Add input group
     document.getElementById('addInputGroupBtn').addEventListener('click', function (e) {
@@ -616,22 +661,22 @@
             placeholder="0">
         </div>
 
-      <div>
-                <label for="rooms_${groupCounter}"  class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
+        <div>
+          <label for="rooms_${groupCounter}"  class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
                   rooms</label>
-                <input type="number" id="rooms_${groupCounter}" name="rooms_${groupCounter}"
+              <input type="number" id="rooms_${groupCounter}" name="rooms_${groupCounter}"
                   class="room w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
                   placeholder="0">
-              </div>
+          </div>
 
-               <div>
+        <div>
       <label for="plan_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Plan</label>
       <input type="text" id="plan_${groupCounter}" name="plan_${groupCounter}"
         class="plan w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base"
         placeholder="Plan name">
     </div>
 
-    <div>
+    <div id="taxRateDiv_${groupCounter}">
       <label for="taxRate_${groupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax Rate</label>
       <select id="taxRate_${groupCounter}" name="taxRate_${groupCounter}" onfocus="getTaxRate(event)"
         class="tax occupancy w-full p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
@@ -656,6 +701,8 @@
 
       inputGroupContainer.appendChild(newInputGroup);
 
+
+
       // BIND EVENT LISTENERS FOR THE NEW ELEMENTS
 
       // const roomTypeSelect = newInputGroup.querySelector(`#roomType_${groupCounter}`);
@@ -668,8 +715,10 @@
       // Update minus buttons visibility
       updateMinusButtons();
 
-      console.log(`Added booking details group #${groupCounter} `);
+
     }
+
+
 
     function addActivityGroup() {
       activityGroupCounter++;

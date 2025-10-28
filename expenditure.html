@@ -212,6 +212,29 @@
         </label>
       </div>
 
+      <div class="flex flex-wrap space-x-4 px-4 py-2">
+        <label class="inline-flex items-center mb-2">
+          <input type="radio" name="taxInvoiceMode" value="new" checked
+            class="h-4 w-4 text-green-600 focus:ring-green-500" id="taxable" />
+          <span class="ml-2 text-gray-700">Taxable</span>
+        </label>
+        <label class="inline-flex items-center mb-2">
+          <input type="radio" name="taxInvoiceMode" value="edit" class="h-4 w-4 text-green-600 focus:ring-green-500"
+            id="nonTax" />
+          <span class="ml-2 text-gray-700">Non-Taxable</span>
+        </label>
+      </div>
+
+      <div class="px-4 py-2">
+        <label class=" block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Currency</label>
+        <select id="currency" name="currency"
+          class="w-auto p-3 sm:p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500 text-sm sm:text-base">
+          <option value="">-- Select --</option>
+          <option value="0">Rupee (₹)</option>
+          <option value="1">Dollar ($)</option>
+        </select>
+      </div>
+
       <div id="editInvoiceFields" class="hidden px-4 py-4 space-y-4">
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
@@ -331,7 +354,7 @@
                   placeholder="0">
               </div>
 
-              <div>
+              <div id="taxRateDiv_1" class="block tax-rate-div">
                 <label for="taxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
                   Rate</label>
                 <select name="taxRate_1" id="taxRate_1" onfocus="getTaxRate(event)"
@@ -340,7 +363,7 @@
                 </select>
               </div>
 
-              <div>
+              <div id="extraTaxRateDiv_1" class="block extra-tax-rate-div">
                 <label for="extraTaxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Extra
                   Tax
                   Rate</label>
@@ -416,7 +439,7 @@
                   placeholder="0">
               </div>
 
-              <div>
+              <div id="activityTaxRateDiv_1" class="block">
                 <label for="activityTaxRate_1" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
                   Rate</label>
                 <select name="activityTaxRate_1" id="activityTaxRate_1" onfocus="getTaxRate(event)"
@@ -529,6 +552,97 @@
     let tourGroupCounter = 1;
     let activityGroupCounter = 1;
 
+    const tourGroupContainer = document.getElementById('tour-group-container');
+    const taxable = document.getElementById("taxable");
+    const nonTax = document.getElementById("nonTax");
+    const addTourGroupBtn = document.getElementById('addTourGroupBtn');
+    const addActivityGroupBtn = document.getElementById('addActivityGroupBtn')
+
+    function toggleTaxRate() {
+      const showTax = taxable.checked;
+
+      document.querySelectorAll('[id^="taxRateDiv_"]').forEach(div => {
+        if (showTax) {
+          div.classList.remove("hidden");
+        } else {
+          div.classList.add("hidden");
+        }
+      });
+
+      // Hide/Show all Extra Tax Rate dropdowns
+      document.querySelectorAll('[id^="extraTaxRateDiv_"]').forEach(div => {
+        div.classList.toggle("hidden", !showTax);
+      });
+
+      // If switched to Non-Taxable → reset all booking values
+      if (!showTax) {
+        document.querySelectorAll('[id^="taxRate_"], [id^="extraTaxRate_"]').forEach(select => {
+          select.value = ""; // reset dropdown
+        });
+
+        // Optional: reset totals if you have total fields
+        document.querySelectorAll('[id^="rate_"]').forEach(total => {
+          total.value = "0";
+        });
+        document.querySelectorAll('[id^="pax_"]').forEach(total => {
+          total.value = "0";
+        });
+        document.querySelectorAll('[id^="tourTotal_"]').forEach(total => {
+          total.value = "0";
+        });
+      }
+    }
+
+    // 🔹 Run once on load
+    toggleTaxRate();
+
+    function toggleActivityTaxRate() {
+      const showTax = taxable.checked;
+
+      document.querySelectorAll('[id^="activityTaxRateDiv_"]').forEach(div => {
+        if (showTax) {
+          div.classList.remove("hidden");
+        } else {
+          div.classList.add("hidden");
+        }
+      });
+
+      // If switched to Non-Taxable → reset all booking values
+      if (!showTax) {
+        document.querySelectorAll('[id^="activityTaxRate_"]').forEach(select => {
+          select.value = ""; // reset dropdown
+        });
+
+        // Optional: reset totals if you have total fields
+        document.querySelectorAll('[id^="activityRate_"]').forEach(total => {
+          total.value = "0";
+        });
+
+        document.querySelectorAll('[id^="activityTotal_"]').forEach(total => {
+          total.value = "0";
+        });
+      }
+
+    }
+
+    // 🔹 Run once on load
+    toggleActivityTaxRate();
+
+    // 🔹 Add listeners for Taxable / Non-Taxable switch
+    // taxable.addEventListener("change", toggleTaxRate);
+    // nonTax.addEventListener("change", toggleTaxRate);
+    // 🔹 Add listeners for Taxable / Non-Taxable switch
+    taxable.addEventListener("change", () => {
+      toggleTaxRate();
+      toggleActivityTaxRate();
+    });
+
+    nonTax.addEventListener("change", () => {
+      toggleTaxRate();
+      toggleActivityTaxRate();
+    });
+
+
     // Initialize the form
     // document.addEventListener('DOMContentLoaded', function () {
     //   // Set today's date as default for checkin/checkout
@@ -610,7 +724,7 @@
             placeholder="0">
         </div>
 
-        <div>
+        <div id="taxRateDiv_${tourGroupCounter}">
           <label for="taxRate_${tourGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
             Rate</label>
           <select name="taxRate_${tourGroupCounter}" id="taxRate_${tourGroupCounter}" onfocus="getTaxRate(event)"
@@ -619,7 +733,7 @@
             </select>
         </div>
 
-        <div>
+        <div id="extraTaxRateDiv_${tourGroupCounter}">
           <label for="extraTaxRate_${tourGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Extra
             Tax
             Rate</label>
@@ -646,11 +760,20 @@
 
       tourGroupContainer.appendChild(newTourGroup);
 
+      // 🔹 Apply visibility rule immediately for new group
+      toggleTaxRate();
+
       initJqDates(tourGroupCounter)
       // Update minus buttons visibility
       updateTourMinusButtons();
 
       console.log(`Added tour group #${tourGroupCounter}`);
+    }
+
+    // 🔹 Remove group
+    function removeInputGroup(button) {
+      const group = button.closest("[data-group-id]");
+      if (group) group.remove();
     }
 
     function addActivityGroup() {
@@ -671,9 +794,6 @@
                   <option value="">-- Select --</option>
                 </select>
               </div>
-
-              
-
               <div>
                 <label for="activityCount_${activityGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">No of
                   Activities</label>
@@ -690,7 +810,7 @@
                   placeholder="0">
               </div>
 
-              <div>
+              <div id="activityTaxRateDiv_${activityGroupCounter}">
                 <label for="activityTaxRate_${activityGroupCounter}" class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Tax
                   Rate</label>
                 <select name="activityTaxRate_${activityGroupCounter}" id="activityTaxRate_${activityGroupCounter}" onfocus="getTaxRate(event)"
@@ -716,6 +836,7 @@
 
       activityGroupContainer.appendChild(newActivityGroup);
 
+      toggleActivityTaxRate();
 
       // Update minus buttons visibility
       updateActivityMinusButtons();
